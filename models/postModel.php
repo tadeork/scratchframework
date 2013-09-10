@@ -29,7 +29,7 @@ class postModel extends Model {
          */
         $id = (int) $id;
         
-        $post = $this->_db->query("select * from posts where =".$id);
+        $post = $this->_db->query("SELECT * FROM posts WHERE id=".$id);
         return $post->fetch();
     }
     
@@ -44,6 +44,31 @@ class postModel extends Model {
          */
         $this->_db->prepare("INSERT INTO posts VALUES (null, '".$titulo."', '".$cuerpo."')")
                 ->execute();
+    }
+    
+    /**
+     * Método para actualizar los datos de un post.
+     * @param type $id
+     * @param type $titulo
+     * @param type $cuerpo
+     */
+    public function editarPost($id, $titulo, $cuerpo){
+        $id = (int) $id;
+        /**
+         * Se actualizan los campos titulo y cuerpo.
+         */
+        $this->_db->prepare("UPDATE posts SET titulo = :titulo, cuerpo = :cuerpo WHERE id = :id")
+                ->execute(
+                        array(
+                           ':id' => $id,
+                           ':titulo' => $titulo,
+                           ':cuerpo' => $cuerpo
+                        ));
+    }
+    
+    public function eliminarPost($id){
+        $id = (int) $id;
+        $post = $this->_db->query("DELETE FROM posts WHERE id= $id");
     }
 
 }

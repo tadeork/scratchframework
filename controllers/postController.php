@@ -58,7 +58,8 @@ class postController extends Controller {
              * Si los datos son correctos se guarda la nueva entrada. 
              */
             $this->_post->insertarPost(
-                    $this->getTexto('titulo'), $this->getTexto('cuerpo')
+                    $this->getPostParam('titulo'), 
+                    $this->getPostParam('cuerpo')
             );
             /**
              * Redirecciona al controlador post.
@@ -70,7 +71,7 @@ class postController extends Controller {
     }
 
     /**
-     * 
+     * Método para editar un post.
      * @param type $id
      */
     public function editar($id) {
@@ -78,7 +79,7 @@ class postController extends Controller {
          * Si lo que tenemos en $id no es un entero 
          * se redirecciona a la página de post.
          */
-        if (!$this->filtrarIn($id)) {
+        if (!$this->filtrarInt($id)) {
             $this->redireccionar('post');
         }
 
@@ -86,12 +87,11 @@ class postController extends Controller {
          * Ahora se verifica que el registro solicitado 
          * exista. Sino redirige a la página post.
          */
-        if (!$this->_post->getPost($this->filtrarIn($id))) {
+        if (!$this->_post->getPost($this->filtrarInt($id))) {
             $this->redireccionar('post');
         }
-
         $this->_view->titulo = 'Editar Post';
-        $this->_view->setJs('nuevo');
+        $this->_view->setJs(array('nuevo'));
 
         if ($this->getInt('guardar') == 1) {
             $this->_view->datos = $_POST;
@@ -106,21 +106,45 @@ class postController extends Controller {
                 $this->_view->_error = 'Debe introducir texto.';
                 $this->_view->renderizar('editar', 'post');
                 exit();
-                
-                $this->_post->editarPost(
-                        $this->filtrarIn($id),
-                        $this->getTexto('titulo'), 
-                        $this->getTexto('cuerpo')
-                        );
-                /**
-                 * Redirecciona al controlador post.
-                 */
-                $this->redireccionar('post');
             }
-            
-            $this->_view->datos = $this->_post->getPost($this->filtrarIn($id));
-            $this->_view->renderizar('editar', 'post');
+
+            $this->_post->editarPost(
+                    $this->filtrarInt($id), 
+                    $this->getPostParam('titulo'), 
+                    $this->getPostParam('cuerpo')
+                    );
+
+            $this->redireccionar('post');
         }
+
+        $this->_view->datos = $this->_post->getPost($this->filtrarInt($id));
+        $this->_view->renderizar('editar', 'post');
+    }
+    
+    /**
+     * Para eliminar un post.
+     * @param type $id
+     */
+    public function eliminar($id) {
+        /**
+         * Si id está vació redirecciona a la vista de 
+         * post.
+         */
+        if (!$this->filtrarInt($id)) {
+            $this->redireccionar('post');
+        }
+        
+        /**
+         * Si id no devuelve un post existente redirecciona
+         * a la vista post.
+         */
+        if (!$this->_post->getPost($this->filtrarInt($id))) {
+            $this->redireccionar('post');
+        }
+        
+        $this->_post->eliminarPost($this->filtrarInt($id));
+        $this->redireccionar('post');
+
     }
 
 }

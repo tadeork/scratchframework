@@ -104,7 +104,7 @@ abstract class Controller{
      * @param type $int
      * @return int
      */
-    protected function filtrarIn($int){
+    protected function filtrarInt($int){
         /**
          * Al venir el valor por GET es obligatorio parsear
          * porque está llegando como string.
@@ -115,6 +115,21 @@ abstract class Controller{
             return $int;
         } else {
             return 0;
+        }
+    }
+    
+    /**
+     * Devuelve el parámetro POST sin filtrar, 
+     * esto lo utiliza para que cuando se hagan cambios
+     * en la base de datos y se realicen a través de la función
+     * prepare de PDO no se guarden los caracteres especiales de html.
+     * @param type $clave
+     * @return type
+     */
+    protected function getPostParam($clave)
+    {
+        if(isset($_POST[$clave])){
+            return $_POST[$clave];
         }
     }
 }
