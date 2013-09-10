@@ -40,5 +40,62 @@ abstract class Controller{
             throw new Exception('Error de Modelo');
         }
     }
+    
+    /**
+     * En este método se va a tomar la variable por POST
+     * y la va a filtrar sanitizando y la devuelve limpia.
+     * @param type $clave
+     */
+    protected function getTexto($clave){
+        /**
+         * Nos aseguramos de que venga contenido por el método POST.
+         */
+        if(isset($_POST[$clave]) && !empty($_POST[$clave])){
+            /**
+             * Quita las comillas simples y dobles.
+             */
+            $_POST[$clave] = htmlspecialchars($_POST[$clave], ENT_QUOTES);
+            return $_POST[$clave];
+        }
+        return '';
+    }
+    
+    /**
+     * En este método se va a tomar la variable por POST
+     * y la va a filtrar sanitizando y la devuelve limpia.
+     * @param type $clave
+     * @return int
+     */
+    protected function getInt($clave){
+        /**
+         * Nos aseguramos de que venga contenido por el método POST.
+         */
+        if(isset($_POST[$clave]) && !empty($_POST[$clave])){
+            /**
+             * Limpia y límita los datos numéricos.
+             */
+            $_POST[$clave] = filter_input(INPUT_POST, $clave, FILTER_VALIDATE_INT);
+            return $_POST[$clave];
+        }
+        return 0;
+    }
+    
+    /**
+     * Cuando se realiza una acción o se quiere cambiar de controlador
+     * de vista se debe re direccionar desde el Controlador principal.
+     * header es un método de PHP para enviar URL de HTTP en el navegador.
+     * @param type $ruta
+     */
+    protected function redireccionar($ruta = false)
+    {
+        if($ruta){
+            header('location:' . BASE_URL . $ruta);
+            exit;
+        }
+        else{
+            header('location:' . BASE_URL);
+            exit;
+        }
+    }
 }
 ?>

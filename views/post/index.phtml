@@ -1,7 +1,20 @@
-<?php
+<h2>Últimas entradas</h2>
+<?php if(isset($this->posts) && count($this->posts)):?>
+<table>
+    <?php for($i = 0; $i < count($this->posts); $i++):?>
+    <tr>
+        <!-- dentro del for se van a recorrer los elementos que devuelva
+        el controlador a través del arreglo en el método getPosts() que se 
+        está accediendo con _view->posts --!>
+        <td><?php echo $this->posts[$i]['id'];?></td>
+        <td><?php echo $this->posts[$i]['titulo'];?></td>
+        <td><?php echo $this->posts[$i]['cuerpo'];?></td>
+    </tr>
+    <?php endfor;?>
+</table>
+<?php else:?>
+<p><strong>No hay nada para mostrar.</strong></p>
+<?php endif;?>
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
+        
+<p><a href="<?php BASE_URL; ?>post/nuevo">Agregar entrada</a></p>
