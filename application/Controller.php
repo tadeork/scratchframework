@@ -97,5 +97,25 @@ abstract class Controller{
             exit;
         }
     }
+    
+    /**
+     * Con este método nos aseguramos de tener con el formato correcto
+     * el valor que recibimos por GET.
+     * @param type $int
+     * @return int
+     */
+    protected function filtrarIn($int){
+        /**
+         * Al venir el valor por GET es obligatorio parsear
+         * porque está llegando como string.
+         */
+        $int = (int) $int;
+        
+        if(is_int($int)){
+            return $int;
+        } else {
+            return 0;
+        }
+    }
 }
 ?>

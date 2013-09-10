@@ -9,11 +9,30 @@ class postModel extends Model {
         parent::__construct();
     }
 
+    /**
+     * Pide todos los post.
+     * @return type
+     */
     public function getPosts() {
         $post = $this->_db->query('select * from posts');
         return $post->fetchall();
     }
-
+    
+    /**
+     * Devuelve un sólo.
+     * @param type $id
+     */
+    public function getPost($id){
+        /**
+         * Parsea el id, para asegurarnos de que 
+         * está llegando un valor entero
+         */
+        $id = (int) $id;
+        
+        $post = $this->_db->query("select * from posts where =".$id);
+        return $post->fetch();
+    }
+    
     /**
      * Método encargado de guardar las nuevas entradas.
      * @param type $titulo

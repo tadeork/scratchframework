@@ -1,34 +1,36 @@
 <?php
 
-class postController extends Controller{
+class postController extends Controller {
+
     /**
      * Con este atributo se va a instanciar 
      * el modelo para utilizarlo en todo el controlador.
      * @var type 
      */
     private $_post;
+
     public function __construct() {
         parent::__construct();
         $this->_post = $this->loadModel('post');
     }
-     
-    public function index(){
+
+    public function index() {
         $this->_view->posts = $this->_post->getPosts();
         $this->_view->titulo = 'Entradas';
         $this->_view->renderizar('index', 'post');
     }
-    
+
     /**
      * Método controlador para crear nuevas entradas.
      * En este método se hacen las llamadas al controlador
      * para validar los datos que vienen desde la vista, es 
      * decir desde el formulario.
      */
-    public function nuevo(){
+    public function nuevo() {
         $this->_view->titulo = 'Nueva Entrada';
         $this->_view->setJs(array('nuevo'));
-        
-        if($this->getInt('guardar') == 1){
+
+        if ($this->getInt('guardar') == 1) {
             /**
              * En caso de que hayan datos válidos los obtenemos desde 
              * el formulario en el método POST y los retornamos para
@@ -38,7 +40,7 @@ class postController extends Controller{
             /**
              * Se valida que haya contenido en el título.
              */
-            if(!$this->getTexto('titulo')){
+            if (!$this->getTexto('titulo')) {
                 $this->_view->_error = 'Debe llevar un título';
                 $this->_view->renderizar('nuevo', 'post');
                 exit();
@@ -46,27 +48,81 @@ class postController extends Controller{
             /**
              * Se valida que haya contenido en el textarea.
              */
-            if(!$this->getTexto('cuerpo')){
+            if (!$this->getTexto('cuerpo')) {
                 $this->_view->_error = 'Debe introducir texto.';
                 $this->_view->renderizar('nuevo', 'post');
                 exit();
             }
-            
+
             /**
              * Si los datos son correctos se guarda la nueva entrada. 
              */
             $this->_post->insertarPost(
-                    $this->getTexto('titulo'),
-                    $this->getTexto('cuerpo')
-                    );
+                    $this->getTexto('titulo'), $this->getTexto('cuerpo')
+            );
             /**
              * Redirecciona al controlador post.
              */
             $this->redireccionar('post');
         }
-        
-            $this->_view->renderizar('nuevo', 'post');
+
+        $this->_view->renderizar('nuevo', 'post');
     }
+
+    /**
+     * 
+     * @param type $id
+     */
+    public function editar($id) {
+        /**
+         * Si lo que tenemos en $id no es un entero 
+         * se redirecciona a la página de post.
+         */
+        if (!$this->filtrarIn($id)) {
+            $this->redireccionar('post');
+        }
+
+        /**
+         * Ahora se verifica que el registro solicitado 
+         * exista. Sino redirige a la página post.
+         */
+        if (!$this->_post->getPost($this->filtrarIn($id))) {
+            $this->redireccionar('post');
+        }
+
+        $this->_view->titulo = 'Editar Post';
+        $this->_view->setJs('nuevo');
+
+        if ($this->getInt('guardar') == 1) {
+            $this->_view->datos = $_POST;
+
+            if (!$this->getTexto('titulo')) {
+                $this->_view->_error = 'Debe llevar un título';
+                $this->_view->renderizar('editar', 'post');
+                exit();
+            }
+
+            if (!$this->getTexto('cuerpo')) {
+                $this->_view->_error = 'Debe introducir texto.';
+                $this->_view->renderizar('editar', 'post');
+                exit();
+                
+                $this->_post->editarPost(
+                        $this->filtrarIn($id),
+                        $this->getTexto('titulo'), 
+                        $this->getTexto('cuerpo')
+                        );
+                /**
+                 * Redirecciona al controlador post.
+                 */
+                $this->redireccionar('post');
+            }
+            
+            $this->_view->datos = $this->_post->getPost($this->filtrarIn($id));
+            $this->_view->renderizar('editar', 'post');
+        }
+    }
+
 }
 
 ?>
