@@ -46,6 +46,12 @@ class View {
                 'titulo' => 'Iniciar Sesion',
                 'enlace' => BASE_URL . 'login'
             );
+            
+            $menu[] = array(
+                'id' => 'registro',
+                'titulo' => 'Registro',
+                'enlace' => BASE_URL . 'registro'
+                );
         }
         
         /*

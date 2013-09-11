@@ -19,6 +19,7 @@ define('APP_NAME', 'Framework ABM');
 define('APP_SLOGAN', 'Este framework está hecho desde lo más básico.');
 define('APP_COMPANY', 'tadeork.com.ar');
 define('SESSION_TIME', 10);
+define('HASH_KEY', '4f6a6d832be79');
 
 define('DB_HOST', 'localhost:3306');
 define('DB_USER', 'root');

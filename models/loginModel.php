@@ -17,7 +17,7 @@ class loginModel extends Model{
         $datos = $this->_db->query(
                 "select * from usuarios " .
                 "where usuario = '$usuario' " .
-                "and pass = '" . md5($password) ."'"
+                "and pass = '" . Hash::getHash('sha1',$password, HASH_KEY) ."'"
                 );
         return $datos->fetch();
     }

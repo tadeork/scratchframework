@@ -1,6 +1,7 @@
 <?php
 
 ini_set('display_errors', 1);
+//echo uniqid() .'<br>';
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', realpath(dirname(__FILE__)) . DS);
 define('APP_PATH', ROOT . 'application' . DS);
@@ -16,7 +17,12 @@ try {
     require_once APP_PATH . 'Registro.php';
     require_once APP_PATH . 'Database.php';
     require_once APP_PATH . 'Session.php';
+    require_once APP_PATH . 'Hash.php';
+    require_once APP_PATH . 'Registro.php';
 
+//    echo Hash::getHash('sha1', '1234', HASH_KEY);
+//    exit();
+    
     Session::init();
 
     /**
