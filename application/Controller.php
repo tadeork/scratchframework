@@ -132,5 +132,41 @@ abstract class Controller{
             return $_POST[$clave];
         }
     }
+    
+    /**
+     * Limpia los strings para evitar las sql-inyections.
+     * @param type $clave
+     * @return type
+     */
+    protected function getSql($clave){
+        if(isset($_POST[$clave]) && !empty($_POST[$clave])){
+            if(!get_magic_quotes_gpc()){
+                /*
+                 * Elimina caracteres especiales en el string dado por unescaped_string, 
+                 * teniendo en cuenta el conjunto de caracteres en uso de la conexión, 
+                 * para que sea seguro usarla en mysql_query(). Si se van a insertar datos binarios, 
+                 * se ha de usar esta función. 
+                 * mysql_real_escape_string() llama a la función mysql_real_escape_string de la biblioteca de MySQL, 
+                 * la cual antepone barras invertidas a los siguientes caracteres: \x00, \n, \r, \, ', " y \x1a. 
+                 * Esta función siempre debe usarse (con pocas excepciones) para hacer seguros los datos 
+                 * antes de enviar una consulta a MySQL
+                 */
+                $_POST[$clave] = mysql_escape_string($_POST[$clave]);
+            }
+            return trim($_POST[$clave]);
+        }
+    }
+    
+    /**
+     * Reemplaza a todos los caracteres que sean diferentes a la cadena de parseo dada.
+     * Esto es para evitar caracteres de escape.
+     * @param type $clave
+     * @return type
+     */
+    protected function getAlphaNum($clave){
+        if(isset($_POST[$clave]) && preg_replace('/[^A-Z0-9_]/i','',$_POST[$clave])){
+            return trim($_POST[$clave]);
+        }
+    }
 }
 ?>

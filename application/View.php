@@ -26,7 +26,31 @@ class View {
                 'enlace' => BASE_URL . 'post'
             )
         );
-
+        
+        if(Session::get('autenticado')){
+            /*
+             * Si el usuario está autenticado muestra 
+             * en el menú la opción de terminar la sesión.
+             */
+            $menu[] = array(
+                'id' => 'login',
+                'titulo' => 'Cerrar Sesion',
+                'enlace' => BASE_URL . 'login/cerrar'
+            );
+        } else {
+            /*
+             * Sino lo está muestra en el menú el login.
+             */
+            $menu[] = array(
+                'id' => 'login',
+                'titulo' => 'Iniciar Sesion',
+                'enlace' => BASE_URL . 'login'
+            );
+        }
+        
+        /*
+         * Puede haber más de un archivo JS para cargar.
+         */
         $js = array();
 
         if (count($this->_js)) {
