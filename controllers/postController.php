@@ -27,6 +27,8 @@ class postController extends Controller {
      * decir desde el formulario.
      */
     public function nuevo() {
+        Session::accesoEstricto(array('usuario'));
+        
         $this->_view->titulo = 'Nueva Entrada';
         $this->_view->setJs(array('nuevo'));
 

@@ -9,8 +9,10 @@
         <td><?php echo $this->posts[$i]['id'];?></td>
         <td><?php echo $this->posts[$i]['titulo'];?></td>
         <td><?php echo $this->posts[$i]['cuerpo'];?></td>
+        <?php  if(Session::accesosView('especial')): ?>
         <td><a href="<?php echo BASE_URL . 'post/editar/'. $this->posts[$i]['id']; ?>">Editar</a></td>
         <td><a href="<?php echo BASE_URL . 'post/eliminar/'. $this->posts[$i]['id']; ?>">Eliminar</a></td>
+        <?php  endif;?>
     </tr>
     <?php endfor;?>
 </table>
@@ -18,5 +20,8 @@
 <p><strong>No hay nada para mostrar.</strong></p>
 <?php endif;?>
 
-        
+<?php if(Session::accesoViewEstricto(array('usuario'))): ?>
 <p><a href="<?php BASE_URL; ?>post/nuevo">Agregar entrada</a></p>
+<?php endif;?>
+        
+        
